@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP Rút Gọn — Sản Xuất Hình Ảnh | Ngọt Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --noir:#14100E;
+    --noir-soft:#221C18;
+    --ivory:#F7F3EC;
+    --ivory-2:#EFE9DF;
+    --ghost:rgba(20,16,14,.06);
+    --line:rgba(20,16,14,.12);
+    --line-2:rgba(20,16,14,.20);
+    --sand:#8C6D4F;
+    --sand-lt:#B39476;
+    --ink:#2A231E;
+    --muted:#6B5F55;
+    --red:#A8382E;
+    --green:#3F6B4F;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Manrope',system-ui,-apple-system,sans-serif;
+    background:var(--ivory);
+    color:var(--ink);
+    font-size:15px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+
+  /* ---------- HEADER ---------- */
+  header{
+    background:var(--noir);
+    color:var(--ivory);
+    padding:56px 0 44px;
+  }
+  .eyebrow{
+    font-size:11px;letter-spacing:.28em;text-transform:uppercase;
+    color:var(--sand-lt);font-weight:600;margin-bottom:18px;
+  }
+  h1{
+    font-family:'Cormorant Garamond',serif;
+    font-weight:600;font-size:clamp(34px,5.2vw,58px);
+    line-height:1.08;letter-spacing:-.01em;margin-bottom:14px;
+  }
+  h1 em{font-style:italic;color:var(--sand-lt)}
+  .lede{max-width:640px;color:rgba(247,243,236,.72);font-size:15px}
+  .meta-row{
+    display:flex;flex-wrap:wrap;gap:0;margin-top:34px;
+    border-top:1px solid rgba(247,243,236,.16);
+  }
+  .meta-cell{
+    flex:1 1 150px;padding:16px 20px 4px 0;
+    border-right:1px solid rgba(247,243,236,.12);
+    margin-right:20px;
+  }
+  .meta-cell:last-child{border-right:none}
+  .meta-cell .k{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(247,243,236,.45);margin-bottom:4px}
+  .meta-cell .v{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--ivory)}
+
+  /* ---------- 4 NGÀY ---------- */
+  .days{background:var(--noir-soft);color:var(--ivory);padding:26px 0 30px}
+  .days-head{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--sand-lt);font-weight:600;margin-bottom:16px}
+  .days-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:rgba(247,243,236,.12)}
+  .day{background:var(--noir-soft);padding:16px 18px}
+  .day .n{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--sand-lt);letter-spacing:.1em;margin-bottom:6px}
+  .day .t{font-weight:700;font-size:14px;margin-bottom:4px}
+  .day .d{font-size:12.5px;color:rgba(247,243,236,.6);line-height:1.5}
+
+  /* ---------- STICKY BAR ---------- */
+  .bar{
+    position:sticky;top:0;z-index:50;
+    background:rgba(247,243,236,.94);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .bar-in{display:flex;align-items:center;gap:16px;padding:12px 0;flex-wrap:wrap}
+  .tabs{display:flex;border:1px solid var(--line-2)}
+  .tab{
+    appearance:none;border:none;background:transparent;cursor:pointer;
+    font-family:'Manrope',sans-serif;font-size:12.5px;font-weight:700;
+    letter-spacing:.06em;text-transform:uppercase;
+    padding:9px 18px;color:var(--muted);transition:.18s;
+  }
+  .tab + .tab{border-left:1px solid var(--line-2)}
+  .tab.on{background:var(--noir);color:var(--ivory)}
+  .tab .cnt{font-weight:500;opacity:.6;margin-left:5px}
+
+  .prog{flex:1;min-width:180px;display:flex;align-items:center;gap:10px}
+  .prog-track{flex:1;height:3px;background:var(--line);position:relative;overflow:hidden}
+  .prog-fill{position:absolute;inset:0;width:0;background:var(--sand);transition:width .3s ease}
+  .prog-num{font-size:12px;font-weight:700;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+
+  .btns{display:flex;gap:8px}
+  .btn{
+    appearance:none;cursor:pointer;font-family:'Manrope',sans-serif;
+    font-size:12px;font-weight:600;letter-spacing:.04em;
+    padding:8px 14px;border:1px solid var(--line-2);background:transparent;color:var(--ink);
+    transition:.18s;
+  }
+  .btn:hover{background:var(--noir);color:var(--ivory);border-color:var(--noir)}
+
+  /* ---------- SECTION ---------- */
+  section{padding:52px 0}
+  .sec-head{margin-bottom:30px;border-bottom:1px solid var(--line);padding-bottom:18px}
+  .sec-head .lbl{font-size:10.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--sand);font-weight:700;margin-bottom:10px}
+  .sec-head h2{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(26px,3.6vw,38px);line-height:1.15}
+  .sec-head h2 em{font-style:italic;color:var(--sand)}
+  .sec-head p{color:var(--muted);font-size:14px;margin-top:8px;max-width:680px}
+
+  /* ---------- CARD ---------- */
+  .list{display:flex;flex-direction:column;gap:14px}
+  .trk-label{font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;font-weight:800;color:var(--sand);padding:14px 0 2px}
+  .card{border:1px solid var(--line-2);background:#fff}
+  .card.done{border-color:rgba(63,107,79,.4);background:rgba(63,107,79,.035)}
+  .card-top{display:flex;align-items:flex-start;gap:14px;padding:18px 20px;cursor:pointer;user-select:none}
+  .chk{
+    flex:none;width:22px;height:22px;margin-top:2px;
+    border:1.5px solid var(--line-2);background:#fff;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;transition:.18s;
+  }
+  .chk:hover{border-color:var(--sand)}
+  .chk svg{width:13px;height:13px;opacity:0;transition:.18s}
+  .card.done .chk{background:var(--green);border-color:var(--green)}
+  .card.done .chk svg{opacity:1}
+  .card-id{
+    flex:none;font-family:'Cormorant Garamond',serif;font-size:26px;line-height:1;
+    color:var(--sand);width:44px;padding-top:1px;letter-spacing:.02em;
+  }
+  .card-tt{flex:1;min-width:0}
+  .card-tt h3{font-size:16.5px;font-weight:800;letter-spacing:-.01em;line-height:1.3}
+  .card.done .card-tt h3{color:var(--muted)}
+  .card-tt .sub{font-size:13px;color:var(--muted);margin-top:3px}
+  .card-tag{
+    flex:none;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+    padding:4px 9px;border:1px solid var(--line-2);color:var(--muted);white-space:nowrap;margin-top:3px;
+  }
+  .caret{flex:none;width:18px;margin-top:6px;transition:transform .22s;color:var(--muted)}
+  .card.open .caret{transform:rotate(180deg)}
+
+  .card-body{display:none;border-top:1px solid var(--line);padding:4px 20px 22px}
+  .card.open .card-body{display:block}
+
+  .blk{padding:18px 0;border-bottom:1px dashed var(--line)}
+  .blk:last-child{border-bottom:none;padding-bottom:0}
+  .blk-h{
+    display:flex;align-items:center;gap:8px;
+    font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:800;
+    color:var(--sand);margin-bottom:10px;
+  }
+  .blk-h .dot{width:5px;height:5px;background:var(--sand);flex:none}
+  ul.steps{list-style:none;display:flex;flex-direction:column;gap:7px}
+  ul.steps li{position:relative;padding-left:20px;font-size:14.2px;line-height:1.6}
+  ul.steps li::before{content:"";position:absolute;left:4px;top:11px;width:6px;height:1px;background:var(--line-2)}
+  code{
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;
+    background:var(--ghost);padding:2px 6px;border:1px solid var(--line);
+  }
+
+  .chips{display:flex;flex-wrap:wrap;gap:7px}
+  .chip{
+    font-size:12.5px;font-weight:600;padding:5px 11px;
+    background:var(--ivory-2);border:1px solid var(--line);
+  }
+  .chip span{font-weight:500;color:var(--muted)}
+
+  .mentor{display:flex;flex-wrap:wrap;gap:6px 20px;align-items:baseline}
+  .mentor .who{font-size:15px;font-weight:800}
+  .mentor .when{font-size:13px;color:var(--muted)}
+
+  .out{background:rgba(63,107,79,.06);border-left:2px solid var(--green);padding:14px 16px}
+  .out .blk-h{color:var(--green);margin-bottom:8px}
+  .out .blk-h .dot{background:var(--green)}
+  .out ul.steps li::before{background:rgba(63,107,79,.5)}
+
+  .fail{margin-top:12px;background:rgba(168,56,46,.05);border-left:2px solid var(--red);padding:12px 16px}
+  .fail .h{font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;font-weight:800;color:var(--red);margin-bottom:5px}
+  .fail p{font-size:13.5px;line-height:1.55}
+
+  /* ---------- TABLE VIEW ---------- */
+  .tablewrap{display:none;overflow-x:auto;border:1px solid var(--line-2);background:#fff}
+  body.tableview .tablewrap{display:block}
+  body.tableview .list{display:none}
+  table{border-collapse:collapse;width:100%;min-width:960px;font-size:13px}
+  th{
+    background:var(--noir);color:var(--ivory);text-align:left;
+    font-size:10px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;
+    padding:12px 14px;vertical-align:bottom;
+  }
+  td{padding:13px 14px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.55}
+  tr:last-child td{border-bottom:none}
+  td.n{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--sand);width:46px}
+  td ul{list-style:none}
+  td ul li{position:relative;padding-left:12px;margin-bottom:3px}
+  td ul li::before{content:"·";position:absolute;left:2px;color:var(--sand)}
+  td.out-c{background:rgba(63,107,79,.05)}
+  .trk-row td{background:var(--ivory-2);font-weight:800;letter-spacing:.14em;text-transform:uppercase;font-size:10.5px;color:var(--sand)}
+
+  /* ---------- NEVER ---------- */
+  .never{background:var(--noir);color:var(--ivory)}
+  .never .sec-head{border-color:rgba(247,243,236,.16)}
+  .never .sec-head .lbl{color:var(--red)}
+  .never .sec-head h2 em{color:var(--sand-lt)}
+  .never .sec-head p{color:rgba(247,243,236,.6)}
+  .never-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1px;background:rgba(247,243,236,.14)}
+  .nv{background:var(--noir);padding:22px 20px}
+  .nv .n{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--red);margin-bottom:8px;letter-spacing:.1em}
+  .nv h4{font-size:15px;font-weight:800;margin-bottom:6px}
+  .nv p{font-size:13px;color:rgba(247,243,236,.6);line-height:1.55}
+
+  /* ---------- GLOSS ---------- */
+  .gloss-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1px;background:var(--line-2);border:1px solid var(--line-2)}
+  .gl{background:#fff;padding:16px 18px}
+  .gl .t{font-weight:800;font-size:13.5px;margin-bottom:4px}
+  .gl .d{font-size:13px;color:var(--muted);line-height:1.55}
+
+  footer{background:var(--noir);color:rgba(247,243,236,.5);padding:34px 0;text-align:center;font-size:12.5px}
+  footer .bn{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--ivory);margin-bottom:6px}
+
+  @media(max-width:640px){
+    .card-id{width:34px;font-size:21px}
+    .card-tag{display:none}
+    .prog{order:3;flex-basis:100%}
+  }
+  @media print{
+    .bar,.btns,.days{display:none}
+    body{font-size:11px;background:#fff}
+    .card-body{display:block!important}
+    .card{break-inside:avoid;border-color:#999}
+    header,.never,footer{background:#fff!important;color:#000!important}
+    header h1,.never h2,.nv h4,footer .bn,.meta-cell .v{color:#000!important}
+    .lede,.nv p,.meta-cell .k,.never .sec-head p{color:#333!important}
+    th{background:#eee!important;color:#000!important}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">Ngọt Studio · Bản rút gọn cho nhân sự mới</div>
+    <h1>SOP Sản Xuất Hình Ảnh<br><em>10 đầu việc cốt lõi</em></h1>
+    <p class="lede">Bản cô đọng từ SOP đầy đủ 24 bước. Chỉ giữ lại những đầu việc mà làm sai là <b>hỏng ca chụp hoặc mất file</b>. Đọc hết trong 30 phút, làm thạo trong 4 ngày. Mỗi đầu việc trả lời đủ 4 câu: làm gì — công cụ nào — ai hướng dẫn — thế nào là đạt.</p>
+    <div class="meta-row">
+      <div class="meta-cell"><div class="k">Áp dụng cho</div><div class="v">Chuyên viên SXHA</div></div>
+      <div class="meta-cell"><div class="k">Phạm vi</div><div class="v">Chụp + Hậu kỳ</div></div>
+      <div class="meta-cell"><div class="k">Đầu việc</div><div class="v">10 (5 + 5)</div></div>
+      <div class="meta-cell"><div class="k">Phiên bản</div><div class="v">v1.0-Lite · 2025</div></div>
+    </div>
+  </div>
+</header>
+
+<div class="days">
+  <div class="wrap">
+    <div class="days-head">Gợi ý làm quen trong 4 ngày</div>
+    <div class="days-grid">
+      <div class="day"><div class="n">NGÀY 01</div><div class="t">Quan sát</div><div class="d">Đọc hết tài liệu này. Đứng xem 2 ca chụp thật. Chưa cầm máy.</div></div>
+      <div class="day"><div class="n">NGÀY 02</div><div class="t">Làm phần chuẩn bị</div><div class="d">Tự làm A1–A2 dưới giám sát. Tập hậu kỳ B1–B2 trên bộ ảnh cũ.</div></div>
+      <div class="day"><div class="n">NGÀY 03</div><div class="t">Cầm máy có kèm</div><div class="d">Bắn A3–A4 với Lead đứng cạnh. Retouch B3 và nhận nhận xét.</div></div>
+      <div class="day"><div class="n">NGÀY 04</div><div class="t">Chạy ca thật</div><div class="d">Chạy trọn 1 ca A1→A5, giao 1 bộ ảnh B1→B5. Lead chấm theo cột Kết quả chuẩn.</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="bar">
+  <div class="wrap">
+    <div class="bar-in">
+      <div class="tabs" id="tabs">
+        <button class="tab on" data-track="A">Track A · Chụp <span class="cnt">5</span></button>
+        <button class="tab" data-track="B">Track B · Hậu kỳ <span class="cnt">5</span></button>
+        <button class="tab" data-track="ALL">Cả hai <span class="cnt">10</span></button>
+      </div>
+      <div class="prog">
+        <div class="prog-track"><div class="prog-fill" id="pf"></div></div>
+        <div class="prog-num" id="pn">0/10</div>
+      </div>
+      <div class="btns">
+        <button class="btn" id="btnView">Xem dạng bảng</button>
+        <button class="btn" id="btnExpand">Mở tất cả</button>
+        <button class="btn" id="btnPrint">In</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="lbl">Quy trình chuẩn</div>
+      <h2>10 Đầu Việc · <em>4 câu hỏi cho mỗi việc</em></h2>
+      <p>Bấm vào từng thẻ để mở chi tiết. Tick ô vuông bên trái khi đã làm thạo — thanh tiến độ trên đầu trang là căn cứ để Lead Team nghiệm thu ngày thứ 4.</p>
+    </div>
+    <div class="list" id="list"></div>
+    <div class="tablewrap"><table id="tbl"></table></div>
+  </div>
+</section>
+
+<section class="never">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="lbl">Lằn ranh đỏ</div>
+      <h2>5 Điều <em>Tuyệt Đối Không</em></h2>
+      <p>Sai một trong năm điều này không phải là "chưa quen việc" — là vi phạm quy trình, phải báo cáo và chịu trách nhiệm.</p>
+    </div>
+    <div class="never-grid">
+      <div class="nv"><div class="n">01</div><h4>Không cóp ảnh ra thiết bị cá nhân</h4><p>Ảnh khách chỉ tồn tại trên thẻ nhớ, máy studio và Drive của Ngọt. Không USB, không điện thoại, không Drive cá nhân.</p></div>
+      <div class="nv"><div class="n">02</div><h4>Không xoá hay format thẻ trước khi backup xong</h4><p>Chỉ format khi đã đếm đủ số ảnh trên máy đích và hậu kỳ xác nhận đã nhận. Mất file là chịu trách nhiệm bồi thường.</p></div>
+      <div class="nv"><div class="n">03</div><h4>Không tự báo giá cho khách</h4><p>Khách hỏi thêm gói, thêm ảnh, thêm sản phẩm — chuyển ngay cho Sale. Nhiếp ảnh viên không chốt giá.</p></div>
+      <div class="nv"><div class="n">04</div><h4>Không trả ảnh khi chưa có Leader duyệt</h4><p>Không gửi link Drive cho Sale hay cho khách trước khi Leader Hậu kỳ approve. Không có ngoại lệ vì gấp.</p></div>
+      <div class="nv"><div class="n">05</div><h4>Không dùng thiết bị đang lỗi</h4><p>Phát hiện đèn, trigger, lens, thẻ bất thường thì báo Lead Team và đổi. Không "chụp tạm rồi tính sau".</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="lbl">Tra cứu nhanh</div>
+      <h2>Công Cụ &amp; <em>Vai Trò Trong Quy Trình</em></h2>
+    </div>
+    <div class="gloss-grid">
+      <div class="gl"><div class="t">Larkbase — Quản lý lịch chụp</div><div class="d">Nguồn duy nhất về thông tin ca, gói chụp, deadline hậu kỳ và trạng thái bộ ảnh. Cập nhật ngay khi xong mỗi chặng.</div></div>
+      <div class="gl"><div class="t">Thư viện ảnh tham chiếu mẫu</div><div class="d">Chuẩn so sánh cho cả góc chụp lẫn màu. Mọi đánh giá "đạt hay chưa" đều đối chiếu về đây.</div></div>
+      <div class="gl"><div class="t">Adobe Bridge + Ứng dụng tạo folder của Ngọt</div><div class="d">Công cụ duy nhất được dùng để tạo folder bộ ảnh. Không gõ tay tên folder trong mọi trường hợp.</div></div>
+      <div class="gl"><div class="t">Phần mềm chọn ảnh của Ngọt</div><div class="d">Dùng ở B2 để chọn ảnh theo mã khách gửi. Không chọn thủ công bên ngoài phần mềm.</div></div>
+      <div class="gl"><div class="t">Evoto AI</div><div class="d">Phần mềm <b>duy nhất</b> cho chỉnh ảnh lần 1: màu sắc, da và khuyết điểm cơ bản. Không dùng Lightroom để làm màu.</div></div>
+      <div class="gl"><div class="t">Photoshop</div><div class="d">Hoàn thiện lần 2 theo đúng trình tự 7 bước: crop → nhặt rác → nắn bóp → ánh sáng → làm nét → AI → màu.</div></div>
+      <div class="gl"><div class="t">Google Drive</div><div class="d">Nơi lưu và bàn giao: Demo, Đã chọn, Chỉnh lần 1, Đã hoàn thiện.</div></div>
+      <div class="gl"><div class="t">Larkbase + Lark Chat</div><div class="d">Cập nhật trạng thái bộ ảnh theo quy trình — đủ cả hai nơi ở mỗi chặng hậu kỳ.</div></div>
+      <div class="gl"><div class="t">Zalo — BÁO CÁO NGÀY / SALE</div><div class="d">Kênh báo cáo cuối ngày của ca chụp và kênh bàn giao ảnh cho Sale. Đúng nhóm, đúng cú pháp.</div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="bn">Ngọt Studio</div>
+    <div>SOP Sản Xuất Hình Ảnh · Bản rút gọn v1.0-Lite · Lưu hành nội bộ</div>
+    <div style="margin-top:6px">Bản đầy đủ 24 bước vẫn là tài liệu tham chiếu gốc — bản này không thay thế.</div>
+  </div>
+</footer>
+
+<script>
+const DATA = [
+{
+ track:"A", id:"A1", tag:"Trước ca · 20 phút",
+ title:"Chuẩn bị trước ca — thông tin, thiết bị, phòng chụp",
+ sub:"Gộp từ bước 1–6 của SOP gốc",
+ steps:[
+  "Đọc phiếu ca trên <b>Larkbase</b>: tên khách, tên bé và tuổi, gói chụp, số concept, yêu cầu đặc biệt, phòng được phân.",
+  "Kiểm thiết bị: <b>tối thiểu 2 viên pin đầy</b>, thẻ nhớ trống đã format, lens sạch, trigger và đèn studio đã test nổ.",
+  "Nhận bàn giao từ Sale: xác nhận lại gói và concept, nhận phiếu chụp có note yêu cầu đặc biệt.",
+  "Mở <b>ảnh mẫu concept</b>, ghi nhớ 3–5 góc bắt buộc và 2–3 góc sáng tạo thêm.",
+  "Setup phòng cho concept đầu tiên: phông, đạo cụ, ánh sáng theo sơ đồ mẫu. Chụp <b>1–2 shot test</b> và soi histogram.",
+  "Đồng phục chỉn chu, không mùi cơ thể."
+ ],
+ tools:[["Larkbase","phiếu ca"],["Thư viện ảnh mẫu concept",""],["Máy ảnh · lens · pin · thẻ",""],["Đèn studio + trigger",""],["Phiếu chụp từ Sale",""]],
+ mentor:["Lead Team SXHA","kèm trực tiếp 3 ca đầu"],
+ mentor2:["NV Sale phụ trách ca","phần bàn giao thông tin khách"],
+ out:[
+  "Trước giờ hẹn <b>15 phút</b>: phòng đã setup xong concept 1, không còn việc setup nào khi khách bước vào.",
+  "Có 1–2 shot test đúng sáng, histogram không cháy vùng sáng.",
+  "Nói lại được không cần nhìn giấy: tên khách, tên bé, gói, số concept."
+ ],
+ fail:"Thiết bị lỗi mà vẫn dùng, hoặc còn đang setup đèn khi khách đã ngồi trong phòng."
+},
+{
+ track:"A", id:"A2", tag:"Đầu ca · 5 phút",
+ title:"Đón khách và thống nhất kịch bản buổi chụp",
+ sub:"Gộp từ bước 7–8",
+ steps:[
+  "Chủ động ra đón, không để khách tự tìm. Cúi chào và tự giới thiệu tên mình.",
+  "<b>Gọi đúng tên khách và tên bé</b> trong suốt buổi chụp.",
+  "Trình bày ngắn thứ tự concept hôm nay, hỏi khách có concept nào muốn ưu tiên.",
+  "Xếp concept khách muốn nhất vào lúc bé còn khoẻ — thường là đầu buổi.",
+  "Script mẫu: <i>\"Chào chị [Tên]! Em là [Tên] — người chụp bộ ảnh cho nhà mình hôm nay ạ. Mình sẽ chụp [X] concept, bắt đầu từ [concept] khi bé đang vui nhất. Chị có concept nào muốn ưu tiên không ạ?\"</i>"
+ ],
+ tools:[["Phiếu chụp",""],["Script đón khách","bản đầy đủ trong SOP gốc"]],
+ mentor:["Lead Team SXHA","nghe thử script 1 lần trước ca đầu tiên"],
+ out:[
+  "Khách <b>xác nhận miệng</b> thứ tự concept trước khi bấm shot đầu tiên.",
+  "Khách và bé được gọi đúng tên ngay từ câu chào.",
+  "Không có khoảng chờ nào quá 2 phút mà khách không được giải thích đang chờ gì."
+ ],
+ fail:"Vào chụp luôn mà khách không biết hôm nay sẽ có những gì — khách lo, bé căng theo."
+},
+{
+ track:"A", id:"A3", tag:"Trong ca · suốt buổi",
+ title:"Setup sáng, chốt thông số và bắn đủ góc",
+ sub:"Gộp từ bước 9–10",
+ steps:[
+  "Setup ánh sáng đúng sơ đồ concept <b>trước khi</b> đưa bé vào.",
+  "Chốt ISO, khẩu, tốc và White Balance đúng nguồn sáng. Chụp test 2–3 shot rồi soi histogram.",
+  "Bắn <b>đủ 3–5 góc bắt buộc</b> theo ảnh mẫu trước, rồi mới sáng tạo thêm.",
+  "Chụp đa dạng: toàn thân, close-up, chính diện, nghiêng.",
+  "Điều phối người hỗ trợ gây chú ý cho bé. Liên tục nói chuyện và khen bé.",
+  "Bé chưa hợp tác thì <b>dừng và chờ</b>, hoặc đổi sang concept khác — không ép, không thở dài."
+ ],
+ tools:[["Sơ đồ ánh sáng từng concept",""],["Ảnh mẫu concept","đối chiếu góc"],["Histogram trên máy",""],["Người hỗ trợ trong ca",""]],
+ mentor:["Lead Team SXHA","đứng cạnh ca đầu, review ảnh gốc sau mỗi ca trong tuần 1"],
+ out:[
+  "Mỗi concept có <b>đủ toàn bộ góc bắt buộc</b>, không thiếu góc nào.",
+  "Ảnh gốc nét, không cháy sáng vùng da, WB không lệch màu rõ rệt.",
+  "Bé không bị ép tạo dáng khi đang quấy."
+ ],
+ fail:"Thiếu góc bắt buộc. Phát hiện lúc hậu kỳ thì không sửa được, phải mời khách quay lại chụp bù."
+},
+{
+ track:"A", id:"A4", tag:"Trong ca · sau mỗi concept",
+ title:"Cho khách xem ảnh, tư vấn và xử lý phát sinh",
+ sub:"Gộp từ bước 11–12",
+ steps:[
+  "Kết thúc mỗi concept là <b>cho khách xem ảnh ngay</b> trên máy.",
+  "Dừng ở tấm đẹp nhất và gợi ý tự nhiên: <i>\"Tấm này in phóng sẽ cực đẹp chị ạ.\"</i>",
+  "Khách <b>chưa hài lòng</b>: hỏi để hiểu lý do, đề xuất giải pháp cụ thể, không phản bác ý kiến khách.",
+  "Khách <b>lo ảnh gốc chưa đẹp</b>: mở ảnh đã hậu kỳ cùng concept của ca trước cho khách xem.",
+  "Khách <b>muốn thêm ngoài gói</b>: báo Sale ngay kèm nội dung khách muốn. Không tự báo giá.",
+  "Mọi phàn nàn đều báo Lead Team trong ngày, không giữ lại."
+ ],
+ tools:[["Màn hình xem ảnh tại phòng chụp",""],["Bộ ảnh hoàn thiện mẫu","dùng để trấn an khách"],["Zalo — NV Sale phụ trách ca",""]],
+ mentor:["NV Sale phụ trách ca","phần tư vấn và chuyển yêu cầu"],
+ mentor2:["Lead Team SXHA","phần xử lý tình huống khó"],
+ out:[
+  "<b>100% concept</b> được cho khách xem ảnh trước khi chuyển sang concept tiếp theo.",
+  "Mọi nhu cầu phát sinh ngoài gói đến tay Sale <b>ngay trong ca</b>, kèm ghi chú rõ khách muốn gì.",
+  "Không có yêu cầu nào của khách bị bỏ lửng mà không có câu trả lời."
+ ],
+ fail:"Tự nhận lời khách một việc ngoài gói rồi Sale không biết — mất uy tín và lệch doanh thu."
+},
+{
+ track:"A", id:"A5", tag:"Sau ca · 15 phút",
+ title:"Đóng ca — feedback, thu dọn, bàn giao thẻ, báo cáo",
+ sub:"Gộp từ bước 13–16",
+ steps:[
+  "Xin feedback: <i>\"Hôm nay em chụp chị có hài lòng không ạ? Có gì chị góp ý để em cải thiện nha chị.\"</i> Lắng nghe và cảm ơn chân thành.",
+  "Tắt đèn studio, tháo trigger, cất máy về đúng khu bảo quản.",
+  "Trả phông nền và đạo cụ về vị trí. Phòng sạch, sẵn sàng cho ca kế tiếp.",
+  "<b>Bàn giao thẻ nhớ trực tiếp</b> cho hậu kỳ, ghi rõ: Tên khách · Ngày chụp · Gói. Xác nhận hậu kỳ đã nhận.",
+  "Cuối ngày gửi báo cáo nhóm Zalo <b>NGỌT — BÁO CÁO NGÀY</b> đúng cú pháp: <code>Ca [Giờ] — Khách [Tên] — Gói [Tên gói] — Kết quả: [Tốt / Có phát sinh: nêu rõ]</code>"
+ ],
+ tools:[["Form ghi feedback khách",""],["Nhãn ghi thông tin thẻ nhớ",""],["Zalo — NGỌT BÁO CÁO NGÀY",""],["Larkbase","cập nhật trạng thái ca"]],
+ mentor:["Lead Team SXHA","duyệt báo cáo ngày trong tuần đầu"],
+ mentor2:["Leader Hậu kỳ","người nhận thẻ và xác nhận"],
+ out:[
+  "<b>Mọi ca đều có feedback</b> được ghi nhận, kể cả feedback tốt.",
+  "Thẻ nhớ bàn giao <b>trong ngày</b>, không qua đêm, có xác nhận của người nhận.",
+  "Phòng chụp và thiết bị về đúng trạng thái ban đầu, đèn đã tắt hết.",
+  "Báo cáo lên nhóm <b>trước 9h sáng hôm sau</b>."
+ ],
+ fail:"Để thẻ nhớ trong túi qua đêm. Đây là rủi ro mất dữ liệu lớn nhất của bộ phận."
+},
+
+{
+ track:"B", id:"B1", tag:"Hậu kỳ · ngay khi nhận thẻ",
+ title:"Nhận thẻ, cóp ảnh và tạo folder bằng ứng dụng của Ngọt",
+ sub:"Gộp từ bước hậu kỳ 1–2",
+ steps:[
+  "Cóp toàn bộ ảnh vào folder gốc trên máy studio hoặc NAS.",
+  "Kiểm <b>đúng số lượng ảnh</b> và <b>đủ số concept</b> đã chụp trong ca — đối chiếu với phiếu ca.",
+  "Mở <b>Adobe Bridge</b> và dùng <b>ứng dụng tạo folder của Ngọt</b> theo hướng dẫn — không tự gõ tay tên folder.",
+  "Ứng dụng sẽ sinh ra 2 folder đúng chuẩn: bản <b>Demo</b> và bản <b>Đã chọn</b>.",
+  "Chỉ format thẻ khi đã kiểm khớp và ảnh đã nằm an toàn trong folder gốc."
+ ],
+ tools:[["Máy trạm hậu kỳ / NAS",""],["Adobe Bridge",""],["Ứng dụng tạo folder của Ngọt","theo hướng dẫn nội bộ"],["Larkbase","đối chiếu tên gói, ngày chụp, số concept"]],
+ mentor:["Leader Hậu kỳ","hướng dẫn dùng Bridge + ứng dụng tạo folder, kiểm 5 bộ đầu tiên"],
+ out:[
+  "Số ảnh trên máy <b>bằng đúng</b> số ảnh trên thẻ, và <b>đủ số concept</b> ghi trên phiếu ca.",
+  "Folder được sinh ra từ <b>ứng dụng của Ngọt</b>, không có folder nào tạo thủ công.",
+  "Thẻ chỉ được format sau khi cả hai điều trên đã được xác nhận."
+ ],
+ fail:"Tự gõ tay tên folder thay vì dùng ứng dụng — sai chuẩn, cả team mất thời gian tìm và dễ trả nhầm bộ ảnh."
+},
+{
+ track:"B", id:"B2", tag:"Hậu kỳ · theo deadline",
+ title:"Chọn ảnh bằng phần mềm của Ngọt, upload Drive, cập nhật Lark",
+ sub:"Gộp từ bước hậu kỳ 3–4",
+ steps:[
+  "Dùng <b>phần mềm chọn ảnh của Ngọt</b> theo hướng dẫn — không chọn thủ công ngoài phần mềm.",
+  "Chọn ảnh <b>theo đúng mã số khách gửi</b>. Nếu khách nhờ Ngọt chọn thay thì chọn theo tiêu chí concept mẫu.",
+  "Cóp ảnh đã chọn vào folder <b>Đã chọn</b>, upload lên Google Drive đúng folder tương ứng.",
+  "Ngọt chọn thay: gửi link Drive cho <b>Sale</b> để Sale báo khách — không gửi thẳng cho khách.",
+  "Có yêu cầu demo: chọn ảnh demo, chỉnh, up vào folder <b>Demo</b>, gửi link cho Sale ngay.",
+  "<b>Cập nhật trạng thái theo quy trình trên Larkbase và Lark Chat</b> theo hướng dẫn — đủ cả hai nơi, không bỏ nơi nào."
+ ],
+ tools:[["Phần mềm chọn ảnh của Ngọt","theo hướng dẫn nội bộ"],["Google Drive",""],["Danh sách mã ảnh khách gửi",""],["Larkbase","cập nhật trạng thái"],["Lark Chat","báo tiến độ theo quy trình"]],
+ mentor:["Leader Hậu kỳ","hướng dẫn phần mềm chọn ảnh, duyệt 3 bộ đầu"],
+ mentor2:["NV Sale phụ trách ca","đầu mối liên hệ khách"],
+ out:[
+  "Số ảnh đã chọn <b>đúng bằng</b> số ảnh trong gói khách mua.",
+  "Link Drive mở được, đúng bộ, đúng quyền xem.",
+  "Trạng thái được cập nhật <b>đủ cả Larkbase và Lark Chat</b>, ngay trong ngày làm việc."
+ ],
+ fail:"Gửi link thẳng cho khách, bỏ qua Sale — Sale mất kiểm soát cuộc trò chuyện và cơ hội upsell."
+},
+{
+ track:"B", id:"B3", tag:"Hậu kỳ · chỉnh lần 1 · Evoto",
+ title:"Chỉnh ảnh lần 1 — Evoto xử lý toàn bộ màu và da",
+ sub:"Gộp từ bước hậu kỳ 5–6",
+ steps:[
+  "Bước 1 chỉnh ảnh <b>chỉ dùng EVOTO</b> — xử lý toàn bộ: màu sắc, da và khuyết điểm cơ bản.",
+  "<b>Không dùng Lightroom hay bất kỳ phần mềm nào khác để làm màu.</b>",
+  "Đối chiếu liên tục với <b>ảnh tham chiếu mẫu</b> của concept, kéo cho tới khi màu <b>giống 90%</b> ảnh mẫu.",
+  "Xử lý da và khuyết điểm ở mức cơ bản — chi tiết sâu để dành cho Photoshop ở B4.",
+  "Nếu không kéo được về mức 90%: <b>gửi Leader Hậu kỳ</b> xử lý, không tự đoán màu.",
+  "Upload folder <b>Chỉnh lần 1</b> trên Drive, cập nhật trạng thái trên Larkbase và Lark Chat."
+ ],
+ tools:[["Evoto AI","phần mềm duy nhất ở bước này"],["Ảnh tham chiếu mẫu của concept",""],["Google Drive — folder Chỉnh lần 1",""],["Larkbase + Lark Chat","cập nhật trạng thái"]],
+ mentor:["Leader Hậu kỳ","hướng dẫn kéo màu trên Evoto, duyệt trước khi làm cả bộ"],
+ out:[
+  "Màu đạt <b>90% giống ảnh tham chiếu mẫu</b> của concept.",
+  "Toàn bộ ảnh trong bộ <b>đồng nhất</b> về sáng và tông màu — không có ảnh lệch tông.",
+  "Da mịn tự nhiên, không bệt, không mất chi tiết vải và tóc."
+ ],
+ fail:"Dùng Lightroom hoặc preset ngoài để làm màu — bộ ảnh lệch khỏi nhận diện thương hiệu và không đồng bộ với các bộ khác."
+},
+{
+ track:"B", id:"B4", tag:"Hậu kỳ · retouch 2",
+ title:"Hoàn thiện lần 2 trên Photoshop — đúng 7 bước theo trình tự",
+ sub:"Từ bước hậu kỳ 7 · làm đúng thứ tự, không đảo bước",
+ steps:[
+  "<b>1. Crop</b> — cân đối lại bố cục.",
+  "<b>2. Nhặt rác</b> — chỉnh sửa decor và phông nền.",
+  "<b>3. Nắn bóp</b> — căn sửa cho cân đối chủ thể.",
+  "<b>4. Cân chỉnh ánh sáng.</b>",
+  "<b>5. Làm nét ảnh</b> — nếu cần.",
+  "<b>6. Thêm chi tiết bằng AI</b> — chỉ khi có yêu cầu.",
+  "<b>7. Căn chỉnh nhẹ màu sắc</b> — chỉ khi cần, vì màu đã xử lý ở Evoto bước B3.",
+  "<b>Đặt cạnh ảnh mẫu để so</b> — phải đạt 80–90% giống mẫu mới coi là xong.",
+  "Upload vào folder <b>Đã hoàn thiện</b> trên Drive."
+ ],
+ tools:[["Adobe Photoshop",""],["Ảnh mẫu concept","mở song song để so"],["Google Drive — folder Đã hoàn thiện",""]],
+ mentor:["Leader Hậu kỳ","chấm mức độ giống mẫu"],
+ out:[
+  "Ảnh hoàn thiện đạt <b>80–90% giống ảnh mẫu</b> concept khi đặt cạnh nhau.",
+  "Làm <b>đúng trình tự 7 bước</b> — bố cục chốt trước, màu đụng sau cùng.",
+  "Không còn rác, không còn vùng da gai, không lộ dấu vết chỉnh sửa.",
+  "Toàn bộ ảnh nằm đúng folder Đã hoàn thiện, đủ số lượng."
+ ],
+ fail:"Đảo trình tự — nắn bóp hoặc kéo màu trước khi crop, xong crop lại là hỏng hết công đã làm."
+},
+{
+ track:"B", id:"B5", tag:"Hậu kỳ · bàn giao",
+ title:"Trình Leader duyệt, bàn giao Sale, đóng trạng thái",
+ sub:"Từ bước hậu kỳ 8",
+ steps:[
+  "Gửi link Google Drive cho <b>Leader Hậu kỳ duyệt</b>.",
+  "<b>Chờ approve</b> rồi mới báo Sale. Không có ngoại lệ vì khách giục.",
+  "Cóp link folder vào nhóm Zalo <b>NGỌT — SALE</b>, ghi đúng cú pháp: <code>Trả ảnh nhà \"[Tên FB khách]\" ngày \"[ngày chụp]\"</code>",
+  "Cập nhật trạng thái <b>HOÀN THÀNH</b> trên Larkbase.",
+  "Nếu phải chỉnh lại theo yêu cầu khách: ghi nhận số lần chỉnh để Lead theo dõi chỉ tiêu."
+ ],
+ tools:[["Google Drive",""],["Zalo — NGỌT SALE",""],["Larkbase","đóng trạng thái"]],
+ mentor:["Leader Hậu kỳ","người duyệt bắt buộc"],
+ mentor2:["Lead Team SXHA","theo dõi deadline và số lần chỉnh lại"],
+ out:[
+  "Bộ ảnh chỉ đến tay Sale <b>sau khi Leader approve</b>.",
+  "Bàn giao <b>đúng hoặc trước deadline</b> ghi trên Larkbase.",
+  "Trạng thái Larkbase là HOÀN THÀNH, không còn bộ nào treo.",
+  "Số lần chỉnh lại của bộ ảnh <b>không quá 1,5 lần</b> — vượt mức này là tín hiệu cần review kỹ năng."
+ ],
+ fail:"Gửi Sale trước khi Leader duyệt. Ảnh lỗi ra tới khách là sự cố cấp bộ phận."
+}
+];
+
+const TRACK_NAME = {A:"Track A — Nhiếp ảnh / Ca chụp", B:"Track B — Hậu kỳ"};
+let current = "A";
+const done = new Set();
+
+function cardHTML(d){
+  const m2 = d.mentor2 ? `<div class="mentor" style="margin-top:8px"><div class="who">${d.mentor2[0]}</div><div class="when">${d.mentor2[1]}</div></div>` : "";
+  return `
+  <article class="card" data-id="${d.id}">
+    <div class="card-top">
+      <div class="chk" data-chk="${d.id}"><svg viewBox="0 0 16 16" fill="none"><path d="M2.5 8.5l3.5 3.5 7.5-8" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="card-id">${d.id}</div>
+      <div class="card-tt">
+        <h3>${d.title}</h3>
+        <div class="sub">${d.sub}</div>
+      </div>
+      <div class="card-tag">${d.tag}</div>
+      <svg class="caret" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </div>
+    <div class="card-body">
+      <div class="blk">
+        <div class="blk-h"><span class="dot"></span>Làm gì</div>
+        <ul class="steps">${d.steps.map(s=>`<li>${s}</li>`).join("")}</ul>
+      </div>
+      <div class="blk">
+        <div class="blk-h"><span class="dot"></span>Công cụ hỗ trợ</div>
+        <div class="chips">${d.tools.map(t=>`<div class="chip">${t[0]}${t[1]?` <span>· ${t[1]}</span>`:""}</div>`).join("")}</div>
+      </div>
+      <div class="blk">
+        <div class="blk-h"><span class="dot"></span>Ai hướng dẫn</div>
+        <div class="mentor"><div class="who">${d.mentor[0]}</div><div class="when">${d.mentor[1]}</div></div>
+        ${m2}
+      </div>
+      <div class="blk">
+        <div class="out">
+          <div class="blk-h"><span class="dot"></span>Kết quả thế nào là chuẩn</div>
+          <ul class="steps">${d.out.map(s=>`<li>${s}</li>`).join("")}</ul>
+        </div>
+        <div class="fail">
+          <div class="h">Lỗi hay gặp nhất</div>
+          <p>${d.fail}</p>
+        </div>
+      </div>
+    </div>
+  </article>`;
+}
+
+function render(){
+  const list = document.getElementById("list");
+  const items = DATA.filter(d => current === "ALL" || d.track === current);
+  let html = "", last = null;
+  items.forEach(d=>{
+    if(current === "ALL" && d.track !== last){
+      html += `<div class="trk-label">${TRACK_NAME[d.track]}</div>`;
+      last = d.track;
+    }
+    html += cardHTML(d);
+  });
+  list.innerHTML = html;
+  document.querySelectorAll(".card").forEach(c=>{
+    if(done.has(c.dataset.id)) c.classList.add("done");
+    if(expanded) c.classList.add("open");
+  });
+  bind();
+  updProg();
+}
+
+function bind(){
+  document.querySelectorAll(".card-top").forEach(t=>{
+    t.addEventListener("click", e=>{
+      if(e.target.closest("[data-chk]")) return;
+      t.parentElement.classList.toggle("open");
+    });
+  });
+  document.querySelectorAll("[data-chk]").forEach(k=>{
+    k.addEventListener("click", e=>{
+      e.stopPropagation();
+      const id = k.dataset.chk, card = k.closest(".card");
+      if(done.has(id)){ done.delete(id); card.classList.remove("done"); }
+      else { done.add(id); card.classList.add("done"); }
+      updProg();
+    });
+  });
+}
+
+function updProg(){
+  document.getElementById("pf").style.width = Math.round(done.size / DATA.length * 100) + "%";
+  document.getElementById("pn").textContent = done.size + "/" + DATA.length;
+}
+
+function renderTable(){
+  const rows = [];
+  ["A","B"].forEach(tr=>{
+    rows.push(`<tr class="trk-row"><td colspan="6">${TRACK_NAME[tr]}</td></tr>`);
+    DATA.filter(d=>d.track===tr).forEach(d=>{
+      const mentors = [d.mentor].concat(d.mentor2 ? [d.mentor2] : []);
+      rows.push(`<tr>
+        <td class="n">${d.id}</td>
+        <td><b>${d.title}</b><div style="color:var(--muted);font-size:12px;margin-top:3px">${d.tag}</div></td>
+        <td><ul>${d.steps.map(s=>`<li>${s}</li>`).join("")}</ul></td>
+        <td><ul>${d.tools.map(t=>`<li>${t[0]}${t[1]?` (${t[1]})`:""}</li>`).join("")}</ul></td>
+        <td><ul>${mentors.map(m=>`<li><b>${m[0]}</b> — ${m[1]}</li>`).join("")}</ul></td>
+        <td class="out-c"><ul>${d.out.map(s=>`<li>${s}</li>`).join("")}</ul></td>
+      </tr>`);
+    });
+  });
+  document.getElementById("tbl").innerHTML = `
+    <thead><tr>
+      <th></th><th style="width:16%">Đầu việc</th><th style="width:28%">Làm gì</th>
+      <th style="width:13%">Công cụ hỗ trợ</th><th style="width:16%">Ai hướng dẫn</th><th style="width:24%">Kết quả chuẩn</th>
+    </tr></thead><tbody>${rows.join("")}</tbody>`;
+}
+
+document.getElementById("tabs").addEventListener("click", e=>{
+  const b = e.target.closest(".tab"); if(!b) return;
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("on"));
+  b.classList.add("on");
+  current = b.dataset.track;
+  render();
+});
+
+let expanded = false;
+document.getElementById("btnExpand").addEventListener("click", e=>{
+  expanded = !expanded;
+  document.querySelectorAll(".card").forEach(c=>c.classList.toggle("open", expanded));
+  e.currentTarget.textContent = expanded ? "Thu gọn tất cả" : "Mở tất cả";
+});
+
+let tableOn = false;
+document.getElementById("btnView").addEventListener("click", e=>{
+  tableOn = !tableOn;
+  document.body.classList.toggle("tableview", tableOn);
+  e.currentTarget.textContent = tableOn ? "Xem dạng thẻ" : "Xem dạng bảng";
+});
+
+document.getElementById("btnPrint").addEventListener("click", ()=>window.print());
+
+render();
+renderTable();
+</script>
+</body>
+</html>
